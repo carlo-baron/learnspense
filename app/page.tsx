@@ -4,54 +4,25 @@ import {
   Pen,
   TransactionHistoryIcon,
   ArrowDown01Icon,
-  Home01Icon,
-  DashboardSquare02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
-  Tabs,
-  TabsList,
-  TabsTrigger
-} from "@/components/ui/tabs";
 
 export default function Page() {
   return(
     <main
-    className="w-full h-screen flex flex-col align-center"
+    className="p-4 w-full h-screen flex flex-col align-center"
     >
-      <Navbar />
+      <h1
+      className='font-semibold text-2xl'
+      >Home</h1>
       <section 
-      className="main flex flex-col items-center"
+      className="main flex flex-col items-center justify-center"
       >
         <Banner />
         <DailyBudget />
         <ExpensesCalculator />
       </section>
     </main>
-  );
-}
-
-function Navbar(){
-  return(
-    <nav
-    className='px-4 flex justify-center items-center h-8 w-full relative top-0'
-    >
-      <p className='absolute left-4'>LearnSpense</p>
-      <Tabs defaultValue='home'>
-        <TabsList>
-          <TabsTrigger
-          value='home'
-          >
-            <HugeiconsIcon icon={Home01Icon} />
-          </TabsTrigger>
-          <TabsTrigger
-          value='dashboard'
-          >
-            <HugeiconsIcon icon={DashboardSquare02Icon} />
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </nav>
   );
 }
 
@@ -114,11 +85,11 @@ function DailyBudget(){
 function Banner(){
   return(
     <section className="banner">
-      <h1
+      <h2
       className="text-center"
-      >Weekly Savings</h1>
+      >Weekly Savings</h2>
       <p
-      className='text-4xl font-bold'
+      className='text-4xl font-extrabold'
       >P 10,000</p>
     </section>
   );
