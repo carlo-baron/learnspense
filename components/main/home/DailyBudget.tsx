@@ -26,31 +26,36 @@ export function DailyBudget(){
   }
 
   return(
-    <section className="text-center budget">
-      <h2>Todays Budget</h2>            
-      <span
-      className='flex'
-      >
-        <Input 
-        ref={inputRef}
-        className='text-center'
-        defaultValue={200}
-        type='number'
-        disabled
-        />
-        <Button
-        onClick={editBudget}
+    <section className="flex flex-col items-center text-center budget">
+      <div className="budget">
+        <h2>Todays Budget</h2>            
+        <span
+        className='relative flex w-fit'
         >
-          {
-            !edit ?
-              <HugeiconsIcon icon={Pen} />
-            :
-              <HugeiconsIcon icon={Check} />
-          }
-        </Button>
-      </span>
-      <h3>Remaining</h3>
-      <p className='font-semibold text-2xl'>P 20</p>
+          <Input 
+          ref={inputRef}
+          className='w-40 text-center'
+          defaultValue={200}
+          type='number'
+          disabled
+          />
+          <Button
+          onClick={editBudget}
+          className='absolute -right-10'
+          >
+            {
+              !edit ?
+                <HugeiconsIcon icon={Pen} />
+              :
+                <HugeiconsIcon icon={Check} />
+            }
+          </Button>
+        </span>
+      </div>
+      <div>
+        <h3>Remaining Budget</h3>
+        <p className='font-semibold text-2xl'>P 20</p>
+      </div>
     </section>
   );
 }
