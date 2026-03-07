@@ -11,7 +11,7 @@ export default function Page() {
       className='font-semibold text-2xl'
       >Home</h1>
       <section 
-      className="main flex flex-col items-center justify-center"
+      className="gap-4 main flex flex-col items-center justify-center"
       >
         <Banner />
         <DailyBudget />
