@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { 
   Home01Icon,
@@ -9,14 +10,17 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs";
+import { usePathname } from "next/navigation";
 
 export function Navbar(){
+  const pathname = usePathname();
+  const defaultValue = pathname.split('/')[1] === "dashboard" ? "dashboard" : "home"
   return(
     <nav
     className='px-4 flex justify-center items-center h-8 w-full relative top-0'
     >
       <p className='absolute left-4'>LearnSpense</p>
-      <Tabs defaultValue='home'>
+      <Tabs defaultValue={defaultValue}>
         <TabsList>
           <TabsTrigger
           value='home'
