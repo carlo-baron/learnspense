@@ -18,7 +18,7 @@ export function Banner(){
         </Button>
       </span>
       <p
-      className='text-5xl font-extrabold'
+      className='text-center text-5xl font-extrabold'
       >P 10,000</p>
     </section>
   );

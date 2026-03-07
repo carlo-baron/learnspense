@@ -5,14 +5,14 @@ import { ExpensesCalculator } from "@/components/main/home/ExpensesCalculator";
 export default function Page() {
   return(
     <main
-    className="p-4 w-full h-screen flex flex-col align-center"
+    className="p-4 w-full h-screen flex flex-col items-center"
     >
-      <h1
-      className='font-semibold text-2xl'
-      >Home</h1>
       <section 
-      className="gap-4 main flex flex-col items-center justify-center"
+      className="w-full max-w-md main flex flex-col"
       >
+        <h1
+        className='font-semibold text-2xl'
+        >Home</h1>
         <Banner />
         <DailyBudget />
         <ExpensesCalculator />

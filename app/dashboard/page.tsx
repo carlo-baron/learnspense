@@ -31,7 +31,7 @@ export default function Dashboard(){
     className="p-4 w-full h-screen flex flex-col items-center"
     >
       <section 
-      className="w-full max-w-lg main flex flex-col"
+      className="w-full max-w-md main flex flex-col"
       >
         <h1
         className='font-semibold text-2xl'

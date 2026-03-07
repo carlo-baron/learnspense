@@ -49,6 +49,8 @@ export function DailyBudget(){
           }
         </Button>
       </span>
+      <h3>Remaining</h3>
+      <p className='font-semibold text-2xl'>P 20</p>
     </section>
   );
 }
