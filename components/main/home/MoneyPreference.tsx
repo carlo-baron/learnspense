@@ -1,6 +1,6 @@
 "use client";
 import { 
-  ArrowDown01Icon,
+  Calendar02Icon
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Button } from "@/components/ui/button";
@@ -37,14 +37,14 @@ export function MoneyPreferenceDialog(){
           >
             <h2>Weekly Savings </h2>
             <HugeiconsIcon 
-            icon={ArrowDown01Icon}
+            icon={Calendar02Icon}
             />
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Preferences
+              Money Preferences
             </DialogTitle>
           </DialogHeader>
           <div className="flex justify-center preferences-dropdown">
