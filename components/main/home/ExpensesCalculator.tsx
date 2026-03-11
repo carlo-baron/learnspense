@@ -1,11 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  TransactionHistoryIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react"
 import { useState } from "react";
-import { ExpenseCategory, ExpensesItem } from "./Expenses/ExpensesItem";
+import {
+  ExpenseCategory,
+  ExpensesItem,
+} from "./Expenses/ExpensesItem";
+import { ExpensesHistoryDialog } from "./Expenses/ExpensesHistoryDialog";
 
 type ExpensesType =
   {
@@ -21,9 +21,7 @@ export function ExpensesCalculator() {
     <section className="expenses">
       <span className="flex items-center">
         <h2>Expenses</h2>
-        <Button variant='ghost'>
-          <HugeiconsIcon icon={TransactionHistoryIcon} />
-        </Button>
+        <ExpensesHistoryDialog />
       </span>
       <section className="flex flex-col gap-4 expense-item">
         <ol className='flex flex-col gap-2'>
