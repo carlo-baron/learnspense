@@ -51,6 +51,7 @@ export function ExpensesItem(
         ref={inputRef}
         type='number'
         onChange={() => valueChanges()}
+        autoFocus
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

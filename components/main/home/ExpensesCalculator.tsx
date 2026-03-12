@@ -1,11 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  TransactionHistoryIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react"
 import { useState } from "react";
-import { ExpenseCategory, ExpensesItem } from "./Expenses/ExpensesItem";
+import {
+  ExpenseCategory,
+  ExpensesItem,
+} from "./Expenses/ExpensesItem";
+import { ExpensesHistoryDialog } from "./Expenses/ExpensesHistoryDialog";
+
+interface ExpensesCategoryWithPrice {
+  category: ExpenseCategory
+  value: number
+}
+
+export type ExpensesHistoryType = {
+  date: Date;
+  total: number;
+  expenses: ExpensesCategoryWithPrice[]
+}
 
 type ExpensesType =
   {
@@ -16,14 +27,32 @@ type ExpensesType =
 
 export function ExpensesCalculator() {
   const [expenses, setExpenses] = useState<ExpensesType[]>([{ id: 0, value: 0, category: 'Food' }]);
+  const [expenseHistory, setExpenseHistory] = useState<ExpensesHistoryType[]>([]);
+
+  function filterExpenses() {
+    return expenses.filter(expense => expense.value > 0);
+  }
+
+  function onCalculate() {
+    const filteredExpenses = filterExpenses();
+    const totalExpenses = filteredExpenses.reduce((accumulator, expense) => accumulator + expense.value, 0);
+    const expensesNoId = filteredExpenses.map(({ id, ...expense }) => expense);
+
+    const newHistory: ExpensesHistoryType = {
+      date: new Date(),
+      total: totalExpenses,
+      expenses: expensesNoId
+    }
+
+    setExpenseHistory(prev => [...prev, newHistory]);
+    setExpenses([]);
+  }
 
   return (
     <section className="expenses">
       <span className="flex items-center">
         <h2>Expenses</h2>
-        <Button variant='ghost'>
-          <HugeiconsIcon icon={TransactionHistoryIcon} />
-        </Button>
+        <ExpensesHistoryDialog history={expenseHistory} />
       </span>
       <section className="flex flex-col gap-4 expense-item">
         <ol className='flex flex-col gap-2'>
@@ -60,7 +89,10 @@ export function ExpensesCalculator() {
           >
             Add
           </Button>
-          <Button onClick={() => console.log(expenses.filter(expense => expense.value > 0))}>
+          <Button
+            onClick={onCalculate}
+            disabled={filterExpenses().length <= 0}
+          >
             Calculate
           </Button>
         </div>
