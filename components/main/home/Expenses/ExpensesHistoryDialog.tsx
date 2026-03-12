@@ -16,8 +16,10 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
+import { ExpensesHistoryType } from "../ExpensesCalculator";
 
-export function ExpensesHistoryDialog() {
+export function ExpensesHistoryDialog({ history }: { history: ExpensesHistoryType[] }) {
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -32,38 +34,50 @@ export function ExpensesHistoryDialog() {
           </DialogTitle>
         </DialogHeader>
         <div className="history">
-          <CollapsibleItem
-            data={
-              {
-                trigger: "Test",
-                content: "Testing"
-              }
-            }
-          />
+          {
+            history.map((item, index) => {
+              return (
+                <CollapsibleItem
+                  key={index}
+                  trigger={item.date.toDateString()}
+                >
+                  <p className="lg font-semibold">Total: {item.total}</p>
+                  {
+                    item.expenses.map((expense, index) => {
+                      return (
+                        <p key={index}>{expense.category}: {expense.value}</p>
+                      );
+                    })
+                  }
+                </CollapsibleItem>
+              )
+            })
+          }
         </div>
       </DialogContent>
     </Dialog>
   );
 }
 
-type CollapsibleItemData = {
-  trigger: string,
-  content: React.ReactNode
-}
 interface CollapsibleItemProps {
-  data: CollapsibleItemData;
+  trigger: string;
+  children: React.ReactNode
 }
 
-export function CollapsibleItem({ data }: CollapsibleItemProps) {
+export function CollapsibleItem({ trigger, children }: CollapsibleItemProps) {
   return (
     <Collapsible>
       <CollapsibleTrigger asChild>
-        <Button variant='ghost'>
-          {data.trigger}
+        <Button
+          className='group w-full'
+          variant='ghost'
+        >
+          {trigger}
+          <HugeiconsIcon className='transition-transform group-data-[state=open]:rotate-180 ml-auto' icon={ArrowDown01Icon} />
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        {data.content}
+        {children}
       </CollapsibleContent>
     </Collapsible>
   );
