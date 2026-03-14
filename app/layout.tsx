@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/main/Navbar";
 import AppDataProvider from "@/providers/AppDataProvider";
+import AppDataMaintenance from "@/components/main/AppDataMaintenance";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppDataProvider>
+          <AppDataMaintenance />
           <Navbar />
           {children}
         </AppDataProvider>

@@ -39,7 +39,7 @@ export function ExpensesHistoryDialog({ history }: { history: ExpensesHistoryTyp
               return (
                 <CollapsibleItem
                   key={index}
-                  trigger={item.date.toDateString()}
+                  trigger={new Date(item.date).toDateString()}
                 >
                   <p className="lg font-semibold">Total: {item.total}</p>
                   {

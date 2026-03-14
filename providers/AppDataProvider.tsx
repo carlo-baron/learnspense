@@ -5,8 +5,13 @@ import { saveAppData, getAppData, AppDataType } from "@/lib/appDataFunctions";
 const initialData: AppDataType = {
   totalMoney: 0,
   totalExpenses: 0,
-  dailyBudget: 200,
-};
+  dailyBudget: 0,
+  currentExpenses: 0,
+  history: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  currentDayCycle: new Date(),
+}
 
 export type AppDataContextType = {
   appData: AppDataType;

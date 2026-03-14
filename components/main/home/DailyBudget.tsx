@@ -23,7 +23,7 @@ export function DailyBudget() {
     } else {
       setEdit(false);
       inputRef.current.disabled = true;
-      // save
+
       const newValue = inputRef.current.valueAsNumber;
       setAppData(prev => ({ ...prev, dailyBudget: newValue }));
     }
@@ -58,7 +58,7 @@ export function DailyBudget() {
       </div>
       <div>
         <h3>Remaining Budget</h3>
-        <p className='font-semibold text-2xl'>P 20</p>
+        <p className='font-semibold text-2xl'>P {appData.dailyBudget - appData.currentExpenses}</p>
       </div>
     </section>
   );
