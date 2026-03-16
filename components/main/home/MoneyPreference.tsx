@@ -1,13 +1,13 @@
 "use client";
-import { 
+import {
   Calendar02Icon
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { DropdownRadio } from "../DropdownRadio";
-
-import { 
+import { useAppData } from "@/hooks/useAppData";
+import {
   Dialog,
   DialogTitle,
   DialogHeader,
@@ -18,26 +18,28 @@ import {
 } from "@/components/ui/dialog";
 
 const dateOptions = ['Daily', 'Weekly', 'Monthly', 'Yearly'] as const;
-type DatePreference = typeof dateOptions[number];
+export type DatePreference = typeof dateOptions[number];
 const moneyOptions = ['Savings', 'Expenses'] as const;
-type MoneyPreference = typeof moneyOptions[number];
+export type MoneyPreference = typeof moneyOptions[number];
 
-export function MoneyPreferenceDialog(){
-  const [datePref, setDatePref] = useState<DatePreference>('Weekly');
-  const [moneyPref, setMoneyPref] = useState<MoneyPreference>('Savings');
+export function MoneyPreferenceDialog() {
+  const { appData, setAppData } = useAppData();
+  const monitorPreferences = appData.monitorPreference;
+  const [datePref, setDatePref] = useState<DatePreference>(monitorPreferences.datePreference);
+  const [moneyPref, setMoneyPref] = useState<MoneyPreference>('Expenses');
 
-  return(
+  return (
     <span className="flex justify-center">
       <Dialog>
         <DialogTrigger asChild>
-          <Button 
-          variant='ghost'
-          size='lg'
-          className='ml-4 relative text-sm'
+          <Button
+            variant='ghost'
+            size='lg'
+            className='ml-4 relative text-sm'
           >
-            <h2>Weekly Savings </h2>
-            <HugeiconsIcon 
-            icon={Calendar02Icon}
+            <h2>{datePref} {moneyPref}</h2>
+            <HugeiconsIcon
+              icon={Calendar02Icon}
             />
           </Button>
         </DialogTrigger>
@@ -49,20 +51,19 @@ export function MoneyPreferenceDialog(){
           </DialogHeader>
           <div className="flex justify-center preferences-dropdown">
             <DropdownRadio
-            options={dateOptions}
-            value={datePref}
-            onValueChange={setDatePref}
+              options={dateOptions}
+              value={datePref}
+              onValueChange={setDatePref}
             />
             <DropdownRadio
-            options={moneyOptions}
-            value={moneyPref}
-            onValueChange={setMoneyPref}
-            />
+              options={moneyOptions}
+              value={moneyPref}
+              onValueChange={setMoneyPref} />
           </div>
-          <p 
-          className='text-center text-6xl font-extrabold'
+          <p
+            className='text-center text-6xl font-extrabold'
           >
-            10,000
+            P 10,000
           </p>
           <DialogFooter>
             <DialogClose asChild>
@@ -70,9 +71,22 @@ export function MoneyPreferenceDialog(){
                 Cancel
               </Button>
             </DialogClose>
-            <Button>
-              Done
-            </Button>
+            <DialogClose asChild>
+              <Button
+                onClick={() => {
+                  setAppData(prev => {
+                    return {
+                      ...prev,
+                      monitorPreference: {
+                        datePreference: datePref,
+                        moneyPreference: moneyPref
+                      }
+                    }
+                  })
+                }}>
+                Done
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </DialogContent>
       </Dialog>

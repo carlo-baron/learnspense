@@ -3,14 +3,15 @@ import { createContext, useEffect, useState } from "react";
 import { saveAppData, getAppData, AppDataType } from "@/lib/appDataFunctions";
 
 const initialData: AppDataType = {
-  totalMoney: 0,
-  totalExpenses: 0,
-  dailyBudget: 0,
-  currentExpenses: 0,
-  history: [],
+  budgetHistory: [],
+  expenseHistory: [],
   createdAt: new Date(),
   updatedAt: new Date(),
   currentDayCycle: new Date(),
+  monitorPreference: {
+    datePreference: 'Daily',
+    moneyPreference: 'Expenses'
+  }
 }
 
 export type AppDataContextType = {

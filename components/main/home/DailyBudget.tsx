@@ -1,4 +1,5 @@
 "use client";
+import { isSameDay } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -25,7 +26,22 @@ export function DailyBudget() {
       inputRef.current.disabled = true;
 
       const newValue = inputRef.current.valueAsNumber;
-      setAppData(prev => ({ ...prev, dailyBudget: newValue }));
+      const today = new Date();
+      let found = false;
+
+      const updatedBudgetHistory = appData.budgetHistory.map(history => {
+        if (isSameDay(history.date, today)) {
+          found = true;
+          return { ...history, amount: newValue }
+        }
+        return history;
+      })
+
+      if (!found) {
+        updatedBudgetHistory.push({ amount: newValue, date: today });
+      }
+
+      setAppData(prev => ({ ...prev, budgetHistory: updatedBudgetHistory }));
     }
   }
 
@@ -39,7 +55,7 @@ export function DailyBudget() {
           <Input
             ref={inputRef}
             className='w-40 text-center'
-            defaultValue={appData.dailyBudget}
+            defaultValue={appData.budgetHistory[0]?.amount ?? 0}
             type='number'
             disabled
           />
@@ -58,7 +74,7 @@ export function DailyBudget() {
       </div>
       <div>
         <h3>Remaining Budget</h3>
-        <p className='font-semibold text-2xl'>P {appData.dailyBudget - appData.currentExpenses}</p>
+        <p className='font-semibold text-2xl'>P {appData.budgetHistory.length > 0 && appData.expenseHistory.length > 0 ? appData.budgetHistory[0].amount - appData.expenseHistory[0].amount : 0}</p>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useAppData } from '@/hooks/useAppData';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   ExpenseCategory,
   ExpensesItem,
@@ -15,7 +15,7 @@ interface ExpensesCategoryWithPrice {
 
 export type ExpensesHistoryType = {
   date: Date;
-  total: number;
+  amount: number;
   expenses: ExpensesCategoryWithPrice[]
 }
 
@@ -41,14 +41,14 @@ export function ExpensesCalculator() {
 
     const newHistory: ExpensesHistoryType = {
       date: new Date(),
-      total: totalCalculatedExpenses,
+      amount: totalCalculatedExpenses,
       expenses: expensesNoId
     }
 
     setAppData(prev => ({
       ...prev,
       currentExpenses: prev.currentExpenses + totalCalculatedExpenses,
-      history: [...prev.history, newHistory]
+      expenseHistory: [...prev.expenseHistory, newHistory]
     }));
     setExpenses([]);
   }
@@ -57,7 +57,7 @@ export function ExpensesCalculator() {
     <section className="expenses">
       <span className="flex items-center">
         <h2>Expenses</h2>
-        <ExpensesHistoryDialog history={appData.history} />
+        <ExpensesHistoryDialog history={appData.expenseHistory} />
       </span>
       <section className="flex flex-col gap-4 expense-item">
         <ol className='flex flex-col gap-2'>
