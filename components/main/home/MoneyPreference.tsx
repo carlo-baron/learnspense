@@ -36,7 +36,7 @@ export function MoneyPreferenceDialog({ onMoneyChange }: MoneyPreferenceDialogPr
   const monitorPreferences = appData.monitorPreference;
   const [datePref, setDatePref] = useState<DatePreference>(monitorPreferences.datePreference);
   const [moneyPref, setMoneyPref] = useState<MoneyPreference>(monitorPreferences.moneyPreference);
-  const [days, setDays] = useState<number>(1);
+  const days = MonitorDatePreferenceMap[datePref];
 
   useEffect(() => {
     setAppData(prev => {
@@ -59,10 +59,6 @@ export function MoneyPreferenceDialog({ onMoneyChange }: MoneyPreferenceDialogPr
     initializePreference();
   }, [appData.monitorPreference]);
 
-  useEffect(() => {
-    function dateChange() { setDays(MonitorDatePreferenceMap[datePref]) }
-    dateChange();
-  }, [datePref]);
 
   const { budget } = useMemo(() => {
     const recent = getRecentHistory(days, appData.budgetHistory);
