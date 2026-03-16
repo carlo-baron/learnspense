@@ -4,7 +4,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { DropdownRadio } from "../DropdownRadio";
 import { useAppData } from "@/hooks/useAppData";
 import {
@@ -12,21 +12,80 @@ import {
   DialogTitle,
   DialogHeader,
   DialogContent,
-  DialogFooter,
   DialogTrigger,
-  DialogClose
 } from "@/components/ui/dialog";
+import { getRecentHistory, historySum } from "@/lib/historyHelper";
 
 const dateOptions = ['Daily', 'Weekly', 'Monthly', 'Yearly'] as const;
 export type DatePreference = typeof dateOptions[number];
 const moneyOptions = ['Savings', 'Expenses'] as const;
 export type MoneyPreference = typeof moneyOptions[number];
 
-export function MoneyPreferenceDialog() {
+const MonitorDatePreferenceMap: Record<DatePreference, number> = {
+  'Daily': 1,
+  'Weekly': 7,
+  'Monthly': 30,
+  'Yearly': 365,
+}
+
+interface MoneyPreferenceDialogProps {
+  onMoneyChange: (newMoney: number) => void;
+}
+export function MoneyPreferenceDialog({ onMoneyChange }: MoneyPreferenceDialogProps) {
   const { appData, setAppData } = useAppData();
   const monitorPreferences = appData.monitorPreference;
   const [datePref, setDatePref] = useState<DatePreference>(monitorPreferences.datePreference);
-  const [moneyPref, setMoneyPref] = useState<MoneyPreference>('Expenses');
+  const [moneyPref, setMoneyPref] = useState<MoneyPreference>(monitorPreferences.moneyPreference);
+  const [days, setDays] = useState<number>(1);
+
+  useEffect(() => {
+    setAppData(prev => {
+      return {
+        ...prev,
+        monitorPreference: {
+          datePreference: datePref,
+          moneyPreference: moneyPref
+        }
+      }
+    });
+
+  }, [setAppData, datePref, moneyPref])
+
+  useEffect(() => {
+    function initializePreference() {
+      setDatePref(appData.monitorPreference.datePreference);
+      setMoneyPref(appData.monitorPreference.moneyPreference);
+    }
+    initializePreference();
+  }, [appData.monitorPreference]);
+
+  useEffect(() => {
+    function dateChange() { setDays(MonitorDatePreferenceMap[datePref]) }
+    dateChange();
+  }, [datePref]);
+
+  const { budget } = useMemo(() => {
+    const recent = getRecentHistory(days, appData.budgetHistory);
+    return {
+      budgetHistory: recent,
+      budget: historySum(recent)
+    };
+  }, [days, appData.budgetHistory]);
+
+  const { expenses } = useMemo(() => {
+    const recent = getRecentHistory(days, appData.expenseHistory);
+    return {
+      expenses: historySum(recent)
+    };
+  }, [days, appData.expenseHistory]);
+
+  const money = useMemo(() => {
+    return moneyPref === 'Savings' ? budget - expenses : expenses;
+  }, [moneyPref, budget, expenses]);
+
+  useEffect(() => {
+    onMoneyChange(money);
+  }, [money, onMoneyChange]);
 
   return (
     <span className="flex justify-center">
@@ -63,31 +122,8 @@ export function MoneyPreferenceDialog() {
           <p
             className='text-center text-6xl font-extrabold'
           >
-            P 10,000
+            P {money}
           </p>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant='outline'>
-                Cancel
-              </Button>
-            </DialogClose>
-            <DialogClose asChild>
-              <Button
-                onClick={() => {
-                  setAppData(prev => {
-                    return {
-                      ...prev,
-                      monitorPreference: {
-                        datePreference: datePref,
-                        moneyPreference: moneyPref
-                      }
-                    }
-                  })
-                }}>
-                Done
-              </Button>
-            </DialogClose>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </span>

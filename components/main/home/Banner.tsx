@@ -1,29 +1,16 @@
 "use client";
 import { MoneyPreferenceDialog } from "./MoneyPreference";
-import { useAppData } from "@/hooks/useAppData";
-import { DatePreference, MoneyPreference } from "./MoneyPreference";
-
-const MonitorDatePreferenceMap: Record<DatePreference, number> = {
-  'Daily': 1,
-  'Weekly': 7,
-  'Monthly': 30,
-  'Yearly': 365,
-}
+import { useState } from "react";
 
 export function Banner() {
-  const { appData } = useAppData();
-  const totalExpenses = appData.expenseHistory.reduce((acc, history) => acc + history.amount, 0);
-
-  function monitorValue() {
-
-  }
+  const [money, setMoney] = useState<number>(0);
 
   return (
     <section className="banner">
-      <MoneyPreferenceDialog />
+      <MoneyPreferenceDialog onMoneyChange={(newMoney) => setMoney(newMoney)} />
       <p
         className='text-center text-5xl font-extrabold'
-      >P {totalExpenses}</p>
+      >P {money}</p>
     </section>
   );
 }

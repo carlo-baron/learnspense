@@ -7,6 +7,7 @@ import {
   ExpensesItem,
 } from "./Expenses/ExpensesItem";
 import { ExpensesHistoryDialog } from "./Expenses/ExpensesHistoryDialog";
+import { HistoryType } from "@/lib/historyHelper";
 
 interface ExpensesCategoryWithPrice {
   category: ExpenseCategory
@@ -14,10 +15,8 @@ interface ExpensesCategoryWithPrice {
 }
 
 export type ExpensesHistoryType = {
-  date: Date;
-  amount: number;
   expenses: ExpensesCategoryWithPrice[]
-}
+} & HistoryType
 
 type ExpensesType =
   {

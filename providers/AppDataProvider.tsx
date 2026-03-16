@@ -1,18 +1,6 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
-import { saveAppData, getAppData, AppDataType } from "@/lib/appDataFunctions";
-
-const initialData: AppDataType = {
-  budgetHistory: [],
-  expenseHistory: [],
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  currentDayCycle: new Date(),
-  monitorPreference: {
-    datePreference: 'Daily',
-    moneyPreference: 'Expenses'
-  }
-}
+import { saveAppData, getAppData, AppDataType, INITIALDATA } from "@/lib/appDataFunctions";
 
 export type AppDataContextType = {
   appData: AppDataType;
@@ -20,7 +8,7 @@ export type AppDataContextType = {
 };
 
 export const AppDataContext = createContext<AppDataContextType>({
-  appData: initialData,
+  appData: INITIALDATA,
   setAppData: () => { },
 });
 
@@ -29,7 +17,7 @@ export default function AppDataProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [appData, setAppData] = useState<AppDataType>(initialData);
+  const [appData, setAppData] = useState<AppDataType>(INITIALDATA);
 
   useEffect(() => {
     function initialize() {
