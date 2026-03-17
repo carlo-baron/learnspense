@@ -26,6 +26,12 @@ export function DailyBudget() {
       inputRef.current.disabled = true;
 
       const newValue = inputRef.current.valueAsNumber;
+      if (newValue <= 0) {
+        const updatedBudgetHistory = appData.budgetHistory.filter(history => !isSameDay(new Date(history.date), new Date()));
+        setAppData(prev => ({ ...prev, budgetHistory: updatedBudgetHistory }));
+        return;
+      }
+
       const today = new Date();
       let found = false;
 
