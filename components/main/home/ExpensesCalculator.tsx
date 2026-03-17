@@ -1,11 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { useAppData } from '@/hooks/useAppData';
 import { useState } from "react";
 import {
   ExpenseCategory,
   ExpensesItem,
 } from "./Expenses/ExpensesItem";
 import { ExpensesHistoryDialog } from "./Expenses/ExpensesHistoryDialog";
+import { HistoryType } from "@/lib/historyHelper";
 
 interface ExpensesCategoryWithPrice {
   category: ExpenseCategory
@@ -13,10 +15,8 @@ interface ExpensesCategoryWithPrice {
 }
 
 export type ExpensesHistoryType = {
-  date: Date;
-  total: number;
   expenses: ExpensesCategoryWithPrice[]
-}
+} & HistoryType
 
 type ExpensesType =
   {
@@ -26,8 +26,8 @@ type ExpensesType =
   }
 
 export function ExpensesCalculator() {
+  const { appData, setAppData } = useAppData();
   const [expenses, setExpenses] = useState<ExpensesType[]>([{ id: 0, value: 0, category: 'Food' }]);
-  const [expenseHistory, setExpenseHistory] = useState<ExpensesHistoryType[]>([]);
 
   function filterExpenses() {
     return expenses.filter(expense => expense.value > 0);
@@ -35,16 +35,20 @@ export function ExpensesCalculator() {
 
   function onCalculate() {
     const filteredExpenses = filterExpenses();
-    const totalExpenses = filteredExpenses.reduce((accumulator, expense) => accumulator + expense.value, 0);
+    const totalCalculatedExpenses = filteredExpenses.reduce((accumulator, expense) => accumulator + expense.value, 0);
     const expensesNoId = filteredExpenses.map(({ id, ...expense }) => expense);
 
     const newHistory: ExpensesHistoryType = {
       date: new Date(),
-      total: totalExpenses,
+      amount: totalCalculatedExpenses,
       expenses: expensesNoId
     }
 
-    setExpenseHistory(prev => [...prev, newHistory]);
+    setAppData(prev => ({
+      ...prev,
+      currentExpenses: prev.currentExpenses + totalCalculatedExpenses,
+      expenseHistory: [...prev.expenseHistory, newHistory]
+    }));
     setExpenses([]);
   }
 
@@ -52,7 +56,7 @@ export function ExpensesCalculator() {
     <section className="expenses">
       <span className="flex items-center">
         <h2>Expenses</h2>
-        <ExpensesHistoryDialog history={expenseHistory} />
+        <ExpensesHistoryDialog history={appData.expenseHistory} />
       </span>
       <section className="flex flex-col gap-4 expense-item">
         <ol className='flex flex-col gap-2'>
@@ -91,7 +95,7 @@ export function ExpensesCalculator() {
           </Button>
           <Button
             onClick={onCalculate}
-            disabled={filterExpenses().length <= 0}
+            disabled={filterExpenses().length <= 0 || appData.dailyBudget <= 0}
           >
             Calculate
           </Button>
