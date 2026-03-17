@@ -1,4 +1,5 @@
 "use client";
+import { notFound } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight01Icon,
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/card"
 
 export default function Dashboard() {
+  notFound();
   return (
     <main
       className="p-4 w-full h-screen flex flex-col items-center"
