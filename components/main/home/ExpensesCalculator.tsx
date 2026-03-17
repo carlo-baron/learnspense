@@ -46,7 +46,6 @@ export function ExpensesCalculator() {
 
     setAppData(prev => ({
       ...prev,
-      currentExpenses: prev.currentExpenses + totalCalculatedExpenses,
       expenseHistory: [...prev.expenseHistory, newHistory]
     }));
     setExpenses([]);
