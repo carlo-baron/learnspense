@@ -7,13 +7,22 @@ import {
   Check
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAppData } from "@/hooks/useAppData";
+import { BudgetHistoryDialog } from "./Budget/BudgetHistoryDialog";
 
 export function DailyBudget() {
+  const { appData, setAppData } = useAppData();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [edit, setEdit] = useState(false);
-  const { appData, setAppData } = useAppData();
+  const [inputValue, setInputValue] = useState<number>(appData.budgetHistory[0]?.amount ?? 0);
+
+  useEffect(() => {
+    function bugetHistoryChange() {
+      setInputValue(appData.budgetHistory[0]?.amount ?? 0)
+    }
+    bugetHistoryChange();
+  }, [appData.budgetHistory])
 
   function editBudget() {
     if (!inputRef.current) return;
@@ -54,14 +63,18 @@ export function DailyBudget() {
   return (
     <section className="flex flex-col items-center text-center budget">
       <div className="budget">
-        <h2>Todays Budget</h2>
+        <span
+          className="items-center flex">
+          <h2>Todays Budget</h2>
+          <BudgetHistoryDialog history={appData.budgetHistory} />
+        </span>
         <span
           className='relative flex w-fit'
         >
           <Input
             ref={inputRef}
             className='w-40 text-center'
-            defaultValue={appData.budgetHistory[0]?.amount ?? 0}
+            defaultValue={inputValue}
             type='number'
             disabled
           />
