@@ -36,7 +36,7 @@ export function BudgetHistoryDialog({ history }: { history: BudgetHistoryType[] 
         </DialogHeader>
         <div className="history">
           {
-            history.map((item, index) => {
+            [...history].reverse().map((item, index) => {
               return (
                 <span
                   key={index}

@@ -15,11 +15,23 @@ export function DailyBudget() {
   const { appData, setAppData } = useAppData();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [edit, setEdit] = useState(false);
-  const [inputValue, setInputValue] = useState<number>(appData.budgetHistory[0]?.amount ?? 0);
+  const [inputValue, setInputValue] = useState<number>([...appData.budgetHistory].reverse()[0]?.amount ?? 0);
+  const [remainingBudget, setRemainingBudget] = useState<number>(0);
+
+  useEffect(() => {
+    function calculateRemainingBudget() {
+      const today = new Date();
+      const currentDayExpenses = [...appData.expenseHistory].filter(history => isSameDay(today, new Date(history.date)));
+      const expensesTotal = currentDayExpenses.reduce((acc, history) => acc + history.amount, 0);
+      const currentBudget = [...appData.budgetHistory].reverse()[0]?.amount ?? 0;
+      setRemainingBudget(currentBudget - expensesTotal);
+    }
+    calculateRemainingBudget();
+  }, [appData.budgetHistory, appData.expenseHistory]);
 
   useEffect(() => {
     function bugetHistoryChange() {
-      setInputValue(appData.budgetHistory[0]?.amount ?? 0)
+      setInputValue([...appData.budgetHistory].reverse()[0]?.amount ?? 0)
     }
     bugetHistoryChange();
   }, [appData.budgetHistory])
@@ -93,7 +105,7 @@ export function DailyBudget() {
       </div>
       <div>
         <h3>Remaining Budget</h3>
-        <p className='font-semibold text-2xl'>P {appData.budgetHistory.length > 0 && appData.expenseHistory.length > 0 ? appData.budgetHistory[0].amount - appData.expenseHistory[0].amount : 0}</p>
+        <p className='font-semibold text-2xl'>P {remainingBudget}</p>
       </div>
     </section>
   );
