@@ -1,10 +1,11 @@
-"use client";
+//'"use client";
+import { notFound } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { 
+import {
   ArrowRight01Icon,
 } from "@hugeicons/core-free-icons";
 import { TrendingUp } from "lucide-react";
-import { 
+import {
   CartesianGrid,
   Line,
   LineChart,
@@ -25,27 +26,28 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function Dashboard(){
-  return(
+export default function Dashboard() {
+  notFound();
+  return (
     <main
-    className="p-4 w-full h-screen flex flex-col items-center"
+      className="p-4 w-full h-screen flex flex-col items-center"
     >
-      <section 
-      className="w-full max-w-lg main flex flex-col"
+      <section
+        className="w-full max-w-md main flex flex-col"
       >
         <h1
-        className='font-semibold text-2xl'
+          className='font-semibold text-2xl'
         >Dashboard</h1>
         <TotalCalculations />
         <HistoryDialog />
         <Chart />
-        
+
       </section>
     </main>
   );
 }
 
-function Chart(){
+function Chart() {
   const chartData = [
     { month: "January", desktop: 186 },
     { month: "February", desktop: 305 },
@@ -55,13 +57,13 @@ function Chart(){
     { month: "June", desktop: 214 },
   ]
   const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig
+    desktop: {
+      label: "Desktop",
+      color: "var(--chart-1)",
+    },
+  } satisfies ChartConfig
 
-  return(
+  return (
     <Card>
       <CardHeader>
         <CardTitle>Line Chart - Linear</CardTitle>
@@ -111,16 +113,15 @@ function Chart(){
   );
 }
 
-function HistoryDialog(){
-  return(
+function HistoryDialog() {
+  return (
     <section className="w-full flex justify-center history">
-      <h2 className='flex'>History <HugeiconsIcon icon={ArrowRight01Icon}/></h2>
+      <h2 className='flex'>History <HugeiconsIcon icon={ArrowRight01Icon} /></h2>
     </section>
   );
 }
-
-function TotalCalculations(){
-  return(
+function TotalCalculations() {
+  return (
     <section className="totals flex gap-4 w-full justify-center">
       <div className="total-expenses">
         <h2>Total Expenses</h2>
