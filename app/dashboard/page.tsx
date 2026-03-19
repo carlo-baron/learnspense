@@ -28,7 +28,7 @@ import {
 
 export default function Dashboard() {
   notFound();
-  return (
+  {/*return (
     <main
       className="p-4 w-full h-screen flex flex-col items-center"
     >
@@ -111,6 +111,7 @@ function Chart() {
       </CardFooter>
     </Card>
   );
+  */}
 }
 
 function HistoryDialog() {
@@ -120,6 +121,7 @@ function HistoryDialog() {
     </section>
   );
 }
+
 function TotalCalculations() {
   return (
     <section className="totals flex gap-4 w-full justify-center">
