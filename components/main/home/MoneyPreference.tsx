@@ -22,7 +22,7 @@ const moneyOptions = ['Savings', 'Expenses'] as const;
 export type MoneyPreference = typeof moneyOptions[number];
 
 const MonitorDatePreferenceMap: Record<DatePreference, number> = {
-  'Daily': 1,
+  'Daily': 0,
   'Weekly': 7,
   'Monthly': 30,
   'Yearly': 365,
