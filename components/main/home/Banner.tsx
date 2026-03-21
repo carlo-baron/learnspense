@@ -1,13 +1,49 @@
 "use client";
+import { useMemo } from "react";
+import { getRecentHistory, historySum } from "@/lib/historyHelper";
 import { MoneyPreferenceDialog } from "./MoneyPreference";
-import { useState } from "react";
+import { useMonitorPreference, useBudgetHistory, useExpenseHistory } from "@/hooks/useAppDataStore";
+
+export const dateOptions = ['Daily', 'Weekly', 'Monthly', 'Yearly'] as const;
+export type DatePreference = typeof dateOptions[number];
+export const moneyOptions = ['Savings', 'Expenses'] as const;
+export type MoneyPreference = typeof moneyOptions[number];
+
+const MonitorDatePreferenceMap: Record<DatePreference, number> = {
+  'Daily': 0,
+  'Weekly': 7,
+  'Monthly': 30,
+  'Yearly': 365,
+}
 
 export function Banner() {
-  const [money, setMoney] = useState<number>(0);
+  const budgetHistory = useBudgetHistory();
+  const expenseHistory = useExpenseHistory();
+  const { datePreference, moneyPreference } = useMonitorPreference();
+
+  const days = MonitorDatePreferenceMap[datePreference];
+
+  const { budget } = useMemo(() => {
+    const recent = getRecentHistory(days, budgetHistory);
+    return {
+      budget: historySum(recent)
+    };
+  }, [days, budgetHistory]);
+
+  const { expenses } = useMemo(() => {
+    const recent = getRecentHistory(days, expenseHistory);
+    return {
+      expenses: historySum(recent)
+    };
+  }, [days, expenseHistory]);
+
+  const money = useMemo(() => {
+    return moneyPreference === 'Savings' ? budget - expenses : expenses;
+  }, [moneyPreference, budget, expenses]);
 
   return (
     <section className="banner">
-      <MoneyPreferenceDialog onMoneyChange={(newMoney) => setMoney(newMoney)} />
+      <MoneyPreferenceDialog money={money} />
       <p
         className='text-center text-5xl font-extrabold'
       >P {money}</p>
