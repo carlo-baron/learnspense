@@ -1,11 +1,10 @@
 "use client";
-import { 
+import {
   ArrowDown01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Button } from "@/components/ui/button";
-
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
@@ -15,7 +14,7 @@ import {
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 
-interface DropdownRadioProps<Type extends string>{
+interface DropdownRadioProps<Type extends string> {
   options: readonly Type[];
   value: Type;
   onValueChange: (value: Type) => void;
@@ -26,14 +25,14 @@ export function DropdownRadio<Type extends string>(
     options,
     value,
     onValueChange
-  } : DropdownRadioProps<Type>
-){
-  return(
+  }: DropdownRadioProps<Type>
+) {
+  return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button>
           {value}
-          <HugeiconsIcon icon={ArrowDown01Icon}/>
+          <HugeiconsIcon icon={ArrowDown01Icon} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -42,15 +41,15 @@ export function DropdownRadio<Type extends string>(
             Date Preference
           </DropdownMenuLabel>
           <DropdownMenuRadioGroup
-          value={value}
-          onValueChange={(val) => onValueChange(val as Type)}
+            value={value}
+            onValueChange={(val) => onValueChange(val as Type)}
           >
             {
               options.map(option => {
-                return(
+                return (
                   <DropdownMenuRadioItem
-                  key={option}
-                  value={option}
+                    key={option}
+                    value={option}
                   >
                     {option}
                   </DropdownMenuRadioItem>

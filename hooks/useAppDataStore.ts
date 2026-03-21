@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { AppDataType, BudgetHistoryType } from "@/lib/appDataFunctions";
-import { ExpensesHistoryType } from "@/components/main/home/ExpensesCalculator";
-import { DatePreference, MoneyPreference } from "@/components/main/home/MoneyPreference";
+import { AppDataType } from "@/types/appDataTypes";
+import { ExpensesHistoryType, BudgetHistoryType } from "@/types/historyTypes";
+import { DatePreference, MoneyPreference } from "@/types/monitorPreferenceTypes";
 
 interface AppDataStoreType extends AppDataType {
   budgetActions: {

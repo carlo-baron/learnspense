@@ -13,8 +13,7 @@ import {
 import { TransactionHistoryIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/components/ui/button";
-import { BudgetHistoryType } from "@/lib/appDataFunctions";
-
+import { BudgetHistoryType } from "@/types/historyTypes";
 import { useUpdateBudgetHistory } from "@/hooks/useAppDataStore";
 
 export function BudgetHistoryDialog({ history }: { history: BudgetHistoryType[] }) {
