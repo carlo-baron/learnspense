@@ -12,7 +12,7 @@ interface AppDataStoreType extends AppDataType {
     updateBudgetHistory: (id: number, newBudget: number) => void;
   },
   expenseActions: {
-    addExpenseHistory: (budget: ExpensesHistoryType) => void;
+    addExpenseHistory: (expense: ExpensesHistoryType) => void;
     removeExpenseHistory: (id: number) => void;
   }
   monitorPreferenceActions: {
@@ -71,9 +71,9 @@ const useAppDataStore = create<AppDataStoreType>()(
       },
 
       expenseActions: {
-        addExpenseHistory: (budget) =>
+        addExpenseHistory: (expense) =>
           set((state) => ({
-            expenseHistory: [budget, ...state.expenseHistory],
+            expenseHistory: [expense, ...state.expenseHistory],
             timestamps: {
               ...state.timestamps,
               updatedAt: new Date(),
@@ -110,7 +110,15 @@ const useAppDataStore = create<AppDataStoreType>()(
           })),
       },
     }),
-    { name: 'app_data' }
+    {
+      name: 'app_data',
+      partialize: (state) => ({
+        budgetHistory: state.budgetHistory,
+        expenseHistory: state.expenseHistory,
+        timestamps: state.timestamps,
+        monitorPreference: state.monitorPreference,
+      })
+    }
   )
 );
 

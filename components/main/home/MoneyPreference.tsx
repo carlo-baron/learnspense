@@ -4,7 +4,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useMemo } from "react";
 import { DropdownRadio } from "../DropdownRadio";
 import {
   Dialog,
@@ -13,76 +12,21 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getRecentHistory, historySum } from "@/lib/historyHelper";
-
 import {
-  useBudgetHistory,
-  useExpenseHistory,
   useMonitorPreference,
   useUpdateDatePreference,
   useUpdateMoneyPreference,
 } from "@/hooks/useAppDataStore";
-
-const dateOptions = ['Daily', 'Weekly', 'Monthly', 'Yearly'] as const;
-export type DatePreference = typeof dateOptions[number];
-const moneyOptions = ['Savings', 'Expenses'] as const;
-export type MoneyPreference = typeof moneyOptions[number];
-
-const MonitorDatePreferenceMap: Record<DatePreference, number> = {
-  'Daily': 0,
-  'Weekly': 7,
-  'Monthly': 30,
-  'Yearly': 365,
-}
+import { moneyOptions, dateOptions } from "./Banner";
 
 interface MoneyPreferenceDialogProps {
-  onMoneyChange: (newMoney: number) => void;
+  money: number;
 }
 
-export function MoneyPreferenceDialog({ onMoneyChange }: MoneyPreferenceDialogProps) {
-  const budgetHistory = useBudgetHistory();
-  const expenseHistory = useExpenseHistory();
-  const monitorPreferences = useMonitorPreference();
-
+export function MoneyPreferenceDialog({ money }: MoneyPreferenceDialogProps) {
+  const { datePreference, moneyPreference } = useMonitorPreference();
   const updateDatePreference = useUpdateDatePreference();
   const updateMoneyPreference = useUpdateMoneyPreference();
-
-  const [datePref, setDatePref] = useState<DatePreference>(monitorPreferences.datePreference);
-  const [moneyPref, setMoneyPref] = useState<MoneyPreference>(monitorPreferences.moneyPreference);
-
-  const days = MonitorDatePreferenceMap[datePref];
-
-  useEffect(() => {
-    updateDatePreference(datePref);
-    updateMoneyPreference(moneyPref);
-  }, [datePref, moneyPref, updateDatePreference, updateMoneyPreference]);
-
-  useEffect(() => {
-    setDatePref(monitorPreferences.datePreference);
-    setMoneyPref(monitorPreferences.moneyPreference);
-  }, [monitorPreferences]);
-
-  const { budget } = useMemo(() => {
-    const recent = getRecentHistory(days, budgetHistory);
-    return {
-      budget: historySum(recent)
-    };
-  }, [days, budgetHistory]);
-
-  const { expenses } = useMemo(() => {
-    const recent = getRecentHistory(days, expenseHistory);
-    return {
-      expenses: historySum(recent)
-    };
-  }, [days, expenseHistory]);
-
-  const money = useMemo(() => {
-    return moneyPref === 'Savings' ? budget - expenses : expenses;
-  }, [moneyPref, budget, expenses]);
-
-  useEffect(() => {
-    onMoneyChange(money);
-  }, [money, onMoneyChange]);
 
   return (
     <span className="flex justify-center">
@@ -93,7 +37,7 @@ export function MoneyPreferenceDialog({ onMoneyChange }: MoneyPreferenceDialogPr
             size='lg'
             className='ml-4 relative text-sm'
           >
-            <h2>{datePref} {moneyPref}</h2>
+            <h2>{datePreference} {moneyPreference}</h2>
             <HugeiconsIcon
               icon={Calendar02Icon}
             />
@@ -102,19 +46,19 @@ export function MoneyPreferenceDialog({ onMoneyChange }: MoneyPreferenceDialogPr
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Money Preferences
+              Monitor Preferences
             </DialogTitle>
           </DialogHeader>
           <div className="flex justify-center preferences-dropdown">
             <DropdownRadio
               options={dateOptions}
-              value={datePref}
-              onValueChange={setDatePref}
+              value={datePreference}
+              onValueChange={updateDatePreference}
             />
             <DropdownRadio
               options={moneyOptions}
-              value={moneyPref}
-              onValueChange={setMoneyPref}
+              value={moneyPreference}
+              onValueChange={updateMoneyPreference}
             />
           </div>
           <p
