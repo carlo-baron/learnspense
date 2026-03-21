@@ -29,7 +29,8 @@ export default function AppDataProvider({
   }, []);
 
   useEffect(() => {
-    saveAppData(appData);
+    const updatedAppData = { ...appData, timestamps: { createdAt: appData.timestamps.createdAt, updatedAt: new Date() } };
+    saveAppData(updatedAppData);
   }, [appData]);
 
   return (

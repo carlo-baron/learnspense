@@ -6,23 +6,28 @@ export type MonitorPreference = {
   datePreference: DatePreference;
   moneyPreference: MoneyPreference;
 }
+
 export type BudgetHistoryType = HistoryType;
+
+export type Timestamps = {
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export type AppDataType = {
   budgetHistory: BudgetHistoryType[];
   expenseHistory: ExpensesHistoryType[];
-  createdAt: Date;
-  updatedAt: Date;
-  currentDayCycle: Date;
+  timestamps: Timestamps;
   monitorPreference: MonitorPreference
 }
 
 export const INITIALDATA: AppDataType = {
   budgetHistory: [],
   expenseHistory: [],
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  currentDayCycle: new Date(),
+  timestamps: {
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
   monitorPreference: {
     datePreference: 'Daily',
     moneyPreference: 'Savings'

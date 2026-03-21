@@ -1,6 +1,7 @@
 import { sub, isWithinInterval, startOfDay } from "date-fns";
 
 export type HistoryType = {
+  id: number,
   amount: number,
   date: Date
 }
