@@ -2,42 +2,63 @@
 import { isSameDay } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Pen,
-  Check
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react"
+import { Pen, Check } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useState, useEffect, useRef } from "react";
-import { useAppData } from "@/hooks/useAppData";
+
+import {
+  useBudgetHistory,
+  useExpenseHistory,
+  useAddBudgetHistory,
+  useUpdateBudgetHistory,
+  useRemoveBudgetHistory,
+} from "@/hooks/useAppDataStore";
+
 import { BudgetHistoryDialog } from "./Budget/BudgetHistoryDialog";
 
 export function DailyBudget() {
-  const { appData, setAppData } = useAppData();
+  const budgetHistory = useBudgetHistory();
+  const expenseHistory = useExpenseHistory();
+
+  const addBudgetHistory = useAddBudgetHistory();
+  const updateBudgetHistory = useUpdateBudgetHistory();
+  const removeBudgetHistory = useRemoveBudgetHistory();
+
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   const [edit, setEdit] = useState(false);
-  const [inputValue, setInputValue] = useState<number>([...appData.budgetHistory].reverse()[0]?.amount ?? 0);
+  const [inputValue, setInputValue] = useState<number>(
+    [...budgetHistory][0]?.amount ?? 0
+  );
   const [remainingBudget, setRemainingBudget] = useState<number>(0);
 
   useEffect(() => {
-    function calculateRemainingBudget() {
-      const today = new Date();
-      const currentDayExpenses = [...appData.expenseHistory].filter(history => isSameDay(today, new Date(history.date)));
-      const expensesTotal = currentDayExpenses.reduce((acc, history) => acc + history.amount, 0);
-      const currentBudget = [...appData.budgetHistory].reverse()[0]?.amount ?? 0;
-      setRemainingBudget(currentBudget - expensesTotal);
-    }
-    calculateRemainingBudget();
-  }, [appData.budgetHistory, appData.expenseHistory]);
+    const today = new Date();
+
+    const currentDayExpenses = expenseHistory.filter((history) =>
+      isSameDay(today, new Date(history.date))
+    );
+
+    const expensesTotal = currentDayExpenses.reduce(
+      (acc, history) => acc + history.amount,
+      0
+    );
+
+    const currentBudget =
+      [...budgetHistory][0]?.amount ?? 0;
+
+    setRemainingBudget(currentBudget - expensesTotal);
+  }, [budgetHistory, expenseHistory]);
 
   useEffect(() => {
-    function bugetHistoryChange() {
-      setInputValue([...appData.budgetHistory].reverse()[0]?.amount ?? 0)
-    }
-    bugetHistoryChange();
-  }, [appData.budgetHistory])
+    setInputValue(
+      [...budgetHistory][0]?.amount ?? 0
+    );
+  }, [budgetHistory]);
 
   function editBudget() {
     if (!inputRef.current) return;
+
     if (!edit) {
       setEdit(true);
       inputRef.current.disabled = false;
@@ -47,65 +68,70 @@ export function DailyBudget() {
       inputRef.current.disabled = true;
 
       const newValue = inputRef.current.valueAsNumber;
+      const today = new Date();
+
       if (newValue <= 0) {
-        const updatedBudgetHistory = appData.budgetHistory.filter(history => !isSameDay(new Date(history.date), new Date()));
-        setAppData(prev => ({ ...prev, budgetHistory: updatedBudgetHistory }));
+        const todayEntry = budgetHistory.find((history) =>
+          isSameDay(new Date(history.date), today)
+        );
+
+        if (todayEntry) {
+          removeBudgetHistory(todayEntry.id);
+        }
         return;
       }
 
-      const today = new Date();
-      let found = false;
+      const todayEntry = budgetHistory.find((history) =>
+        isSameDay(new Date(history.date), today)
+      );
 
-      const updatedBudgetHistory = appData.budgetHistory.map(history => {
-        if (isSameDay(history.date, today)) {
-          found = true;
-          return { ...history, amount: newValue }
-        }
-        return history;
-      })
-
-      if (!found) {
-        updatedBudgetHistory.push({ amount: newValue, date: today });
+      if (todayEntry) {
+        updateBudgetHistory(todayEntry.id, newValue);
+      } else {
+        addBudgetHistory({
+          id: Date.now(),
+          amount: newValue,
+          date: today,
+        });
       }
-
-      setAppData(prev => ({ ...prev, budgetHistory: updatedBudgetHistory }));
     }
   }
 
   return (
     <section className="flex flex-col items-center text-center budget">
       <div className="budget">
-        <span
-          className="items-center flex">
+        <span className="items-center flex">
           <h2>Todays Budget</h2>
-          <BudgetHistoryDialog history={appData.budgetHistory} />
+          <BudgetHistoryDialog history={budgetHistory} />
         </span>
-        <span
-          className='relative flex w-fit'
-        >
+
+        <span className="relative flex w-fit">
           <Input
             ref={inputRef}
-            className='w-40 text-center'
-            defaultValue={inputValue}
-            type='number'
+            className="w-40 text-center"
+            value={inputValue}
+            onChange={(e) =>
+              setInputValue(Number(e.target.value))
+            }
+            type="number"
             disabled
           />
-          <Button
-            onClick={editBudget}
-            className='absolute -right-10'
-          >
-            {
-              !edit ?
-                <HugeiconsIcon icon={Pen} />
-                :
-                <HugeiconsIcon icon={Check} />
-            }
+
+          <Button onClick={editBudget} className="absolute -right-10">
+            {!edit ? (
+              <HugeiconsIcon icon={Pen} />
+            ) : (
+              <HugeiconsIcon icon={Check} />
+            )}
           </Button>
         </span>
       </div>
+
       <div>
         <h3>Remaining Budget</h3>
-        <p className='font-semibold text-2xl'>P {remainingBudget}</p>
+        <p className="font-semibold text-2xl">
+          P {remainingBudget}
+        </p>
       </div>
     </section>
   );
