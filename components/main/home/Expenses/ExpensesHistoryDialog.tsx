@@ -11,29 +11,21 @@ import {
   ArrowDown01Icon,
   RestoreBinIcon,
 } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react"
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { ExpensesHistoryType } from "../ExpensesCalculator";
-import { useAppData } from "@/hooks/useAppData";
-import { isSameDay } from "date-fns";
+import { ExpensesHistoryType } from "@/types/historyTypes";
+import { useRemoveExpenseHistory } from "@/hooks/useAppDataStore";
 
 export function ExpensesHistoryDialog({ history }: { history: ExpensesHistoryType[] }) {
-  const { appData, setAppData } = useAppData();
+  const removeExpenseHistory = useRemoveExpenseHistory();
 
   function restoreExpenses(expenseHistory: ExpensesHistoryType) {
-    const updatedExpenseHistory = [...appData.expenseHistory].filter(history => history !== expenseHistory);
-
-    setAppData(prev => {
-      return {
-        ...prev,
-        expenseHistory: updatedExpenseHistory
-      };
-    });
+    removeExpenseHistory(expenseHistory.id);
   }
 
   return (
@@ -51,10 +43,10 @@ export function ExpensesHistoryDialog({ history }: { history: ExpensesHistoryTyp
         </DialogHeader>
         <div className="history">
           {
-            [...history].reverse().map((item, index) => {
+            [...history].map((item) => {
               return (
                 <CollapsibleItem
-                  key={index}
+                  key={item.id}
                   trigger={new Date(item.date).toDateString()}
                   onRestore={() => restoreExpenses(item)}
                 >

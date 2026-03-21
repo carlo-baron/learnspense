@@ -1,13 +1,9 @@
-import { sub, isWithinInterval } from "date-fns";
-
-export type HistoryType = {
-  amount: number,
-  date: Date
-}
+import { sub, isWithinInterval, startOfDay } from "date-fns";
+import { HistoryType } from "@/types/historyTypes";
 
 export function getRecentHistory(days: number, historyArray: HistoryType[]) {
   const now = new Date();
-  const intervalStart = sub(now, { days });
+  const intervalStart = startOfDay(sub(now, { days }));
 
   const filteredHistory = historyArray.filter(history =>
     isWithinInterval(new Date(history.date), {
