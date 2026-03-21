@@ -18,7 +18,7 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { ExpensesHistoryType } from "../ExpensesCalculator";
+import { ExpensesHistoryType } from "@/types/historyTypes";
 import { useRemoveExpenseHistory } from "@/hooks/useAppDataStore";
 
 export function ExpensesHistoryDialog({ history }: { history: ExpensesHistoryType[] }) {

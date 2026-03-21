@@ -16,8 +16,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
-
-export type ExpenseCategory = 'Food' | 'Transport' | 'Wants' | 'Others';
+import { ExpenseCategory } from "@/types/expensesTypes";
 
 interface ExpensesItemProps {
   onRemove: () => void;

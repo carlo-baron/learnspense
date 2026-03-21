@@ -1,34 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-
 import {
-  ExpenseCategory,
   ExpensesItem,
 } from "./Expenses/ExpensesItem";
 import { ExpensesHistoryDialog } from "./Expenses/ExpensesHistoryDialog";
-
 import {
   useExpenseHistory,
   useAddExpenseHistory,
 } from "@/hooks/useAppDataStore";
-
-import { HistoryType } from "@/lib/historyHelper";
-
-interface ExpensesCategoryWithPrice {
-  category: ExpenseCategory;
-  value: number;
-}
-
-export type ExpensesHistoryType = {
-  expenses: ExpensesCategoryWithPrice[];
-} & HistoryType;
-
-type ExpensesType = {
-  id: number;
-  value: number;
-  category: ExpenseCategory;
-};
+import { ExpensesHistoryType } from "@/types/historyTypes";
+import { ExpensesType } from "@/types/expensesTypes";
 
 export function ExpensesCalculator() {
   const expenseHistory = useExpenseHistory();

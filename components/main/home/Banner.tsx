@@ -3,11 +3,7 @@ import { useMemo } from "react";
 import { getRecentHistory, historySum } from "@/lib/historyHelper";
 import { MoneyPreferenceDialog } from "./MoneyPreference";
 import { useMonitorPreference, useBudgetHistory, useExpenseHistory } from "@/hooks/useAppDataStore";
-
-export const dateOptions = ['Daily', 'Weekly', 'Monthly', 'Yearly'] as const;
-export type DatePreference = typeof dateOptions[number];
-export const moneyOptions = ['Savings', 'Expenses'] as const;
-export type MoneyPreference = typeof moneyOptions[number];
+import { DatePreference } from "@/types/monitorPreferenceTypes";
 
 const MonitorDatePreferenceMap: Record<DatePreference, number> = {
   'Daily': 0,

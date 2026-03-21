@@ -1,10 +1,5 @@
 import { sub, isWithinInterval, startOfDay } from "date-fns";
-
-export type HistoryType = {
-  id: number,
-  amount: number,
-  date: Date
-}
+import { HistoryType } from "@/types/historyTypes";
 
 export function getRecentHistory(days: number, historyArray: HistoryType[]) {
   const now = new Date();

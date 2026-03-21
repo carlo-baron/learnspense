@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Pen, Check } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState, useEffect, useRef } from "react";
-
 import {
   useBudgetHistory,
   useExpenseHistory,
@@ -13,7 +12,6 @@ import {
   useUpdateBudgetHistory,
   useRemoveBudgetHistory,
 } from "@/hooks/useAppDataStore";
-
 import { BudgetHistoryDialog } from "./Budget/BudgetHistoryDialog";
 
 export function DailyBudget() {

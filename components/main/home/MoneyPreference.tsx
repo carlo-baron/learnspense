@@ -17,7 +17,7 @@ import {
   useUpdateDatePreference,
   useUpdateMoneyPreference,
 } from "@/hooks/useAppDataStore";
-import { moneyOptions, dateOptions } from "./Banner";
+import { moneyOptions, dateOptions } from "@/types/monitorPreferenceTypes";
 
 interface MoneyPreferenceDialogProps {
   money: number;
