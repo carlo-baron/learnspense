@@ -94,7 +94,7 @@ export function ExpensesCalculator() {
           </Button>
           <Button
             onClick={onCalculate}
-            disabled={filterExpenses().length <= 0 || [...appData.budgetHistory].reverse()[0]?.amount <= 0}
+            disabled={filterExpenses().length <= 0}
           >
             Calculate
           </Button>
