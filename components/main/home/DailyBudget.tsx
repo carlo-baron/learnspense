@@ -25,10 +25,24 @@ export function DailyBudget() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [edit, setEdit] = useState(false);
-  const [inputValue, setInputValue] = useState<number>(
-    [...budgetHistory][0]?.amount ?? 0
-  );
+  const [inputValue, setInputValue] = useState<number>(0);
   const [remainingBudget, setRemainingBudget] = useState<number>(0);
+
+  useEffect(() => {
+    const today = new Date();
+
+    const todayEntry = budgetHistory.find((history) =>
+      isSameDay(new Date(history.date), today)
+    );
+
+    if (!todayEntry) {
+      addBudgetHistory({
+        id: Date.now(),
+        amount: 0,
+        date: today,
+      });
+    }
+  }, [budgetHistory, addBudgetHistory]);
 
   useEffect(() => {
     const today = new Date();
