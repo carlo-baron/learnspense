@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/collapsible";
 import { ExpensesHistoryType } from "@/types/historyTypes";
 import { useRemoveExpenseHistory } from "@/hooks/useAppDataStore";
+import { ConfirmationDialog } from "../../ConfirmationDialog";
 
 export function ExpensesHistoryDialog({ history }: { history: ExpensesHistoryType[] }) {
   const removeExpenseHistory = useRemoveExpenseHistory();
@@ -79,15 +80,16 @@ export function CollapsibleItem({ trigger, children, onRestore }: CollapsibleIte
     <Collapsible>
       <CollapsibleTrigger asChild>
         <span className='flex'>
-          <Button
-            variant='ghost'
-            onClick={(e) => {
-              e.preventDefault();
-              onRestore();
-            }}
+          <ConfirmationDialog
+            onContinue={onRestore}
+            description="This will permanently remove the expense history. You also cannot add back expenses for that date (if its the past)."
           >
-            <HugeiconsIcon icon={RestoreBinIcon} />
-          </Button>
+            <Button
+              variant='ghost'
+            >
+              <HugeiconsIcon icon={RestoreBinIcon} />
+            </Button>
+          </ConfirmationDialog>
           <Button
             className='group flex-1'
             variant='ghost'
