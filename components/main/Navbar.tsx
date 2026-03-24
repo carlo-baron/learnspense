@@ -1,4 +1,3 @@
-"use client";
 import {
   NavigationMenu,
   NavigationMenuLink,
@@ -12,17 +11,7 @@ import {
   DashboardSquare02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger
-} from "@/components/ui/tabs";
-import { usePathname } from "next/navigation";
-
 export function Navbar() {
-  const pathname = usePathname();
-  const defaultValue = pathname.split('/')[1] === "dashboard" ? "dashboard" : "home"
-
   return (
     <NavigationMenu
       className='w-full max-w-none'
