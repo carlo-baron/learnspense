@@ -1,43 +1,49 @@
 "use client";
+import {
+  NavigationMenu,
+  NavigationMenuLink,
+  NavigationMenuItem,
+  navigationMenuTriggerStyle,
+  NavigationMenuList
+} from "../ui/navigation-menu";
 import Link from "next/link";
-import { 
+import {
   Home01Icon,
   DashboardSquare02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react"
-import { 
+import {
   Tabs,
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs";
 import { usePathname } from "next/navigation";
 
-export function Navbar(){
+export function Navbar() {
   const pathname = usePathname();
   const defaultValue = pathname.split('/')[1] === "dashboard" ? "dashboard" : "home"
-  return(
-    <nav
-    className='px-4 flex justify-center items-center h-8 w-full relative top-0'
+
+  return (
+    <NavigationMenu
+      className='w-full max-w-none'
     >
       <p className='absolute left-4'>LearnSpense</p>
-      <Tabs defaultValue={defaultValue}>
-        <TabsList>
-          <TabsTrigger
-          value='home'
-          >
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href='/'>
               <HugeiconsIcon icon={Home01Icon} />
             </Link>
-          </TabsTrigger>
-          <TabsTrigger
-          value='dashboard'
-          >
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href='/dashboard'>
               <HugeiconsIcon icon={DashboardSquare02Icon} />
             </Link>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </nav>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
