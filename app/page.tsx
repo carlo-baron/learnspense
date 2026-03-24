@@ -5,7 +5,7 @@ import { ExpensesCalculator } from "@/components/main/home/ExpensesCalculator";
 export default function Page() {
   return (
     <main
-      className="p-4 w-full h-screen flex flex-col items-center"
+      className="p-4 w-full flex flex-col items-center"
     >
       <section
         className="gap-4 w-full max-w-md main flex flex-col"
