@@ -1,13 +1,41 @@
+"use client";
+import {
+  useBudgetHistory,
+  useExpenseHistory,
+} from "@/hooks/useAppDataStore";
+import { historySum } from "@/lib/historyHelper";
+
 export function TotalCalculations() {
+  const expenseHistory = useExpenseHistory();
+  const budgetHistory = useBudgetHistory();
+
+  //temporary
+  const days = 7;
+
+  const expensesTotalToday = historySum(0, expenseHistory);
+  const currentBudget = budgetHistory[0]?.amount ?? 0;
+
+  const remainingBudget = currentBudget - expensesTotalToday;
+  const totalBudget = historySum(days, budgetHistory);
+  const totalExpenses = historySum(days, expenseHistory);
+
   return (
-    <section className="totals flex gap-4 w-full justify-center">
-      <div className="total-expenses">
-        <h2>Total Expenses</h2>
-        <p className='font-extrabold text-2xl text-center'>P 1,000</p>
+    <section className="grid grid-cols-2 grid-rows-3 totals gap-4">
+      <div className='col-span-2 flex flex-col items-center'>
+        <h2>Remaining Budget</h2>
+        <p className='font-extrabold text-2xl'>P {remainingBudget}</p>
       </div>
-      <div className="total-savings">
+      <div className='flex flex-col items-center'>
+        <h2>Total Budget</h2>
+        <p className='font-extrabold text-2xl'>P {totalBudget}</p>
+      </div>
+      <div className='flex flex-col items-center'>
+        <h2>Total Expenses</h2>
+        <p className='font-extrabold text-2xl'>P {totalExpenses}</p>
+      </div>
+      <div className='col-span-2 flex flex-col items-center'>
         <h2>Total Savings</h2>
-        <p className='font-extrabold text-2xl text-center'>P 100</p>
+        <p className='font-extrabold text-2xl'>P {totalBudget - totalExpenses}</p>
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 "use client";
 import { useMemo } from "react";
-import { getRecentHistory, historySum } from "@/lib/historyHelper";
+import { historySum } from "@/lib/historyHelper";
 import { MoneyPreferenceDialog } from "./MoneyPreference";
 import { useMonitorPreference, useBudgetHistory, useExpenseHistory } from "@/hooks/useAppDataStore";
 import { DatePreference } from "@/types/monitorPreferenceTypes";
@@ -19,18 +19,12 @@ export function Banner() {
 
   const days = MonitorDatePreferenceMap[datePreference];
 
-  const { budget } = useMemo(() => {
-    const recent = getRecentHistory(days, budgetHistory);
-    return {
-      budget: historySum(recent)
-    };
+  const budget = useMemo(() => {
+    return historySum(days, budgetHistory);
   }, [days, budgetHistory]);
 
-  const { expenses } = useMemo(() => {
-    const recent = getRecentHistory(days, expenseHistory);
-    return {
-      expenses: historySum(recent)
-    };
+  const expenses = useMemo(() => {
+    return historySum(days, expenseHistory);
   }, [days, expenseHistory]);
 
   const money = useMemo(() => {
