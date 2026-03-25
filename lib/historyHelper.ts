@@ -14,8 +14,9 @@ export function getRecentHistory(days: number, historyArray: HistoryType[]) {
   return filteredHistory;
 }
 
-export function historySum(historyArray: HistoryType[]) {
-  const sum = historyArray.reduce(
+export function historySum(days: number, historyArray: HistoryType[]) {
+  const filteredHistory = getRecentHistory(days, historyArray);
+  const sum = filteredHistory.reduce(
     (acc, history) => acc + history.amount,
     0
   );
