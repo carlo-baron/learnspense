@@ -42,9 +42,9 @@ export function ExpensesHistoryDialog({ history }: { history: ExpensesHistoryTyp
             Expenses History
           </DialogTitle>
         </DialogHeader>
-        <div className="history">
+        <div className="max-h-64 overflow-auto history">
           {
-            [...history].map((item) => {
+            history.map((item) => {
               return (
                 <CollapsibleItem
                   key={item.id}
