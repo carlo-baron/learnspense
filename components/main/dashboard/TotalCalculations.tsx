@@ -10,7 +10,7 @@ export function TotalCalculations() {
   const budgetHistory = useBudgetHistory();
 
   //temporary
-  const days = 7;
+  const days = 6;
 
   const expensesTotalToday = historySum(0, expenseHistory);
   const currentBudget = budgetHistory[0]?.amount ?? 0;
