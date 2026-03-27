@@ -1,7 +1,7 @@
 import { sub, isWithinInterval, startOfDay } from "date-fns";
 import { HistoryType } from "@/types/historyTypes";
 
-export function getRecentHistory(days: number, historyArray: HistoryType[]) {
+export function getRecentHistory<T extends HistoryType>(days: number, historyArray: T[]): T[] {
   const now = new Date();
   const intervalStart = startOfDay(sub(now, { days }));
 
@@ -14,7 +14,7 @@ export function getRecentHistory(days: number, historyArray: HistoryType[]) {
   return filteredHistory;
 }
 
-export function historySum(days: number, historyArray: HistoryType[]) {
+export function historySum<T extends HistoryType>(days: number, historyArray: T[]): number {
   const filteredHistory = getRecentHistory(days, historyArray);
   const sum = filteredHistory.reduce(
     (acc, history) => acc + history.amount,

@@ -1,5 +1,6 @@
 "use client";
-import { HistoryChart } from "@/components/main/dashboard/SimpleChart";
+import { HistoryLineChart } from "./HistoryLineChart";
+import { HistoryBarChart } from "./HistoryBarChart";
 import {
   Tabs,
   TabsContent,
@@ -20,12 +21,16 @@ export function InfoCharts() {
       <TabsList>
         <TabsTrigger value='budget'>Budget</TabsTrigger>
         <TabsTrigger value='expenses'>Expenses</TabsTrigger>
+        <TabsTrigger value='categories'>Categories</TabsTrigger>
       </TabsList>
       <TabsContent value='budget'>
-        <HistoryChart history={budgetHistory} />
+        <HistoryLineChart history={budgetHistory} />
       </TabsContent>
       <TabsContent value='expenses'>
-        <HistoryChart history={expenseHistory} />
+        <HistoryLineChart history={expenseHistory} />
+      </TabsContent>
+      <TabsContent value='categories'>
+        <HistoryBarChart history={expenseHistory} />
       </TabsContent>
     </Tabs>
   );

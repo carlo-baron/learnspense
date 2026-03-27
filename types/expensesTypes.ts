@@ -1,6 +1,7 @@
-export type ExpenseCategory = 'Food' | 'Transport' | 'Wants' | 'Others';
+export const expenseCategories = ['Food', 'Transport', 'Wants', 'Others'] as const;
+export type ExpenseCategory = typeof expenseCategories[number];
 
-export type ExpensesCategoryWithPrice = {
+export type ExpensesCategoryWithPriceType = {
   category: ExpenseCategory;
   value: number;
 }
