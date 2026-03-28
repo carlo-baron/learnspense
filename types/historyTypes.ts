@@ -1,4 +1,4 @@
-import { ExpensesCategoryWithPrice } from "./expensesTypes";
+import { ExpensesCategoryWithPriceType } from "./expensesTypes";
 
 export type HistoryType = {
   id: number,
@@ -8,5 +8,5 @@ export type HistoryType = {
 export type BudgetHistoryType = HistoryType;
 
 export type ExpensesHistoryType = {
-  expenses: ExpensesCategoryWithPrice[];
+  expenses: ExpensesCategoryWithPriceType[];
 } & HistoryType;

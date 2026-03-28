@@ -1,5 +1,5 @@
-import { SimpleChart } from "@/components/main/dashboard/Chart";
 import { TotalCalculations } from "@/components/main/dashboard/TotalCalculations";
+import { InfoCharts } from "@/components/main/dashboard/InfoChart";
 
 export default function Dashboard() {
   return (
@@ -13,7 +13,7 @@ export default function Dashboard() {
           className='font-semibold text-2xl'
         >Dashboard</h1>
         <TotalCalculations />
-        <SimpleChart />
+        <InfoCharts />
       </section>
     </main>
   );

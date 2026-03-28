@@ -7,9 +7,9 @@ import { DatePreference } from "@/types/monitorPreferenceTypes";
 
 const MonitorDatePreferenceMap: Record<DatePreference, number> = {
   'Daily': 0,
-  'Weekly': 7,
+  'Weekly': 6,
   'Monthly': 30,
-  'Yearly': 365,
+  'Yearly': 364,
 }
 
 export function Banner() {
