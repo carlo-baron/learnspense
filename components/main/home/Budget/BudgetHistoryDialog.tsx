@@ -32,8 +32,8 @@ export function BudgetHistoryDialog({ history }: { history: BudgetHistoryType[] 
           <DialogTitle>Budget History</DialogTitle>
         </DialogHeader>
 
-        <div className="history">
-          {[...history].map((item) => {
+        <div className="max-h-64 overflow-auto history">
+          {history.map((item) => {
             return (
               <span
                 key={item.id}

@@ -10,9 +10,9 @@ import {
   useExpenseHistory,
   useAddBudgetHistory,
   useUpdateBudgetHistory,
-  useRemoveBudgetHistory,
 } from "@/hooks/useAppDataStore";
 import { BudgetHistoryDialog } from "./Budget/BudgetHistoryDialog";
+import { historySum } from "@/lib/historyHelper";
 
 export function DailyBudget() {
   const budgetHistory = useBudgetHistory();
@@ -20,15 +20,28 @@ export function DailyBudget() {
 
   const addBudgetHistory = useAddBudgetHistory();
   const updateBudgetHistory = useUpdateBudgetHistory();
-  const removeBudgetHistory = useRemoveBudgetHistory();
+
+  const expensesTotalToday = historySum(0, expenseHistory);
+  const currentBudget = budgetHistory[0]?.amount ?? 0;
+
+  const remainingBudget = currentBudget - expensesTotalToday;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [edit, setEdit] = useState(false);
-  const [inputValue, setInputValue] = useState<number>(0);
-  const [remainingBudget, setRemainingBudget] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<number>(currentBudget);
+
+  function addBudget(date: Date, amount: number) {
+    addBudgetHistory({
+      id: Date.now(),
+      amount: amount,
+      date: date,
+    });
+  }
 
   useEffect(() => {
+    if (budgetHistory.length <= 0) return;
+
     const today = new Date();
 
     const todayEntry = budgetHistory.find((history) =>
@@ -36,37 +49,10 @@ export function DailyBudget() {
     );
 
     if (!todayEntry) {
-      addBudgetHistory({
-        id: Date.now(),
-        amount: 0,
-        date: today,
-      });
+      addBudget(today, 0);
     }
-  }, [budgetHistory, addBudgetHistory]);
-
-  useEffect(() => {
-    const today = new Date();
-
-    const currentDayExpenses = expenseHistory.filter((history) =>
-      isSameDay(today, new Date(history.date))
-    );
-
-    const expensesTotal = currentDayExpenses.reduce(
-      (acc, history) => acc + history.amount,
-      0
-    );
-
-    const currentBudget =
-      [...budgetHistory][0]?.amount ?? 0;
-
-    setRemainingBudget(currentBudget - expensesTotal);
-  }, [budgetHistory, expenseHistory]);
-
-  useEffect(() => {
-    setInputValue(
-      [...budgetHistory][0]?.amount ?? 0
-    );
   }, [budgetHistory]);
+
 
   function editBudget() {
     if (!inputRef.current) return;
@@ -79,19 +65,9 @@ export function DailyBudget() {
       setEdit(false);
       inputRef.current.disabled = true;
 
-      const newValue = inputRef.current.valueAsNumber;
+      const rawValue = inputRef.current.valueAsNumber;
+      const newValue = isNaN(rawValue) ? 0 : rawValue;
       const today = new Date();
-
-      if (newValue <= 0) {
-        const todayEntry = budgetHistory.find((history) =>
-          isSameDay(new Date(history.date), today)
-        );
-
-        if (todayEntry) {
-          removeBudgetHistory(todayEntry.id);
-        }
-        return;
-      }
 
       const todayEntry = budgetHistory.find((history) =>
         isSameDay(new Date(history.date), today)
@@ -100,11 +76,7 @@ export function DailyBudget() {
       if (todayEntry) {
         updateBudgetHistory(todayEntry.id, newValue);
       } else {
-        addBudgetHistory({
-          id: Date.now(),
-          amount: newValue,
-          date: today,
-        });
+        addBudget(today, newValue);
       }
     }
   }
@@ -122,9 +94,14 @@ export function DailyBudget() {
             ref={inputRef}
             className="w-40 text-center"
             value={inputValue}
-            onChange={(e) =>
-              setInputValue(Number(e.target.value))
-            }
+            onChange={(e) => {
+              const value = e.target.valueAsNumber;
+              if (!isNaN(value)) {
+                setInputValue(value)
+              } else {
+                setInputValue(0);
+              }
+            }}
             type="number"
             disabled
           />
